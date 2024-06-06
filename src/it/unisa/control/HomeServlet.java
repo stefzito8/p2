@@ -1,6 +1,8 @@
 package it.unisa.control;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -23,7 +25,6 @@ public class HomeServlet extends HttpServlet {
        
  
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		ProdottoDao dao = new ProdottoDao();
 		
 		ArrayList<ArrayList<ProdottoBean>> categorie = new ArrayList<>();
@@ -52,6 +53,7 @@ public class HomeServlet extends HttpServlet {
 		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/" + redirectedPage);
 		dispatcher.forward(request, response);
+		
 	}
 
 
