@@ -15,13 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 import it.unisa.model.ProdottoBean;
 import it.unisa.model.ProdottoDao;
 
+
 @WebServlet("/catalogo")
 public class CatalogoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		
 		ProdottoDao prodDao = new ProdottoDao();
 		ProdottoBean bean = new ProdottoBean();
 		String sort = request.getParameter("sort");
@@ -35,7 +36,7 @@ public class CatalogoServlet extends HttpServlet {
 					bean.setDescrizione(request.getParameter("descrizione"));
 					bean.setIva(request.getParameter("iva"));
 					bean.setPrezzo(Double.parseDouble(request.getParameter("prezzo")));
-					bean.setQuantità(Integer.parseInt(request.getParameter("quantit�")));
+					bean.setQuantità(Integer.parseInt(request.getParameter("quantità")));
 					bean.setPiattaforma(request.getParameter("piattaforma"));
 					bean.setGenere(request.getParameter("genere"));
 					bean.setImmagine(request.getParameter("img"));
@@ -52,7 +53,7 @@ public class CatalogoServlet extends HttpServlet {
 					bean.setDescrizione(request.getParameter("descrizione"));
 					bean.setIva(request.getParameter("iva"));
 					bean.setPrezzo(Double.parseDouble(request.getParameter("prezzo")));
-					bean.setQuantità(Integer.parseInt(request.getParameter("quantit�")));
+					bean.setQuantità(Integer.parseInt(request.getParameter("quantità")));
 					bean.setPiattaforma(request.getParameter("piattaforma"));
 					bean.setGenere(request.getParameter("genere"));
 					bean.setImmagine(request.getParameter("img"));
@@ -88,5 +89,6 @@ public class CatalogoServlet extends HttpServlet {
 			throws ServletException, IOException {
 		doGet(request, response);
 	}
+	    
 
 }

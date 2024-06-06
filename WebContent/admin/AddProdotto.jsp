@@ -5,7 +5,20 @@
 <head>
 <meta charset="ISO-8859-1">
 	<link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css">
-
+	<script>
+     function validateForm() {
+        let fields = ["nome", "descrizione", "iva", "prezzo", "dataUscita", "quantità", "img", "piattaforma", "genere", "descDett"];
+         for (let field of fields) {
+             let input = document.forms["myform"][field].value;
+             if (input.includes("<") || input.includes(">")) {
+             alert("I caratteri < e > non sono ammessi.");
+             return false;
+           }
+       }
+        return true;
+      }
+      //document.getElementById('myform').onsubmit = validateForm();
+    </script>
 <title>Aggiungi prodotto</title>
 </head>
 <body>
@@ -19,7 +32,7 @@
 	
 		<h2>AGGIUNGI PRODOTTO</h2>
 
-	<form action="../catalogo" method="post" id="myform">
+	<form action="../catalogo" method="post" id="myform" onsubmit="return validateForm()">
 		<input type="hidden" name="action" value="add">
 		<input type="hidden" name="page" value="admin/GestioneCatalogo.jsp"><br><br>
 		<div class="tableRow">
