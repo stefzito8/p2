@@ -1,9 +1,12 @@
 package it.unisa.control;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,13 +44,15 @@ public class RegistrazioneServlet extends HttpServlet {
 		
 		try {
 			
+			String hashedPassword = hashPassword(pwd);
+			
 			UserBean user = new UserBean();
 			user.setNome(nome);
 			user.setCognome(cognome);
 			user.setEmail(email);
 			user.setDataDiNascita(Date.valueOf(dataNascita));
 			user.setUsername(username);
-			user.setPassword(pwd);
+			user.setPassword(hashedPassword);
 			user.setAmministratore(false);
 			user.setCap(null);
 			user.setIndirizzo(null);
@@ -57,9 +62,22 @@ public class RegistrazioneServlet extends HttpServlet {
 		}catch(SQLException e) {
 			System.out.println("Error:" + e.getMessage());
 		}
+		catch(NoSuchAlgorithmException e){
+			System.out.println("Error:" + e.getMessage());
+		}
 				
 		response.sendRedirect(request.getContextPath() + "/Home.jsp");
 
+	}
+	
+	private String hashPassword(String password) throws NoSuchAlgorithmException {
+	    MessageDigest md = MessageDigest.getInstance("SHA-512");
+	    byte[] hashedBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+	    StringBuilder sb = new StringBuilder();
+	    for (byte b : hashedBytes) {
+	        sb.append(String.format("%02x", b));
+	    }
+	    return sb.toString();
 	}
 
 }

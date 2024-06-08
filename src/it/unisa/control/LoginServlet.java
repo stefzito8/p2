@@ -1,6 +1,9 @@
 package it.unisa.control;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -32,18 +35,22 @@ public class LoginServlet extends HttpServlet {
 		{	    
 
 		     UserBean user = new UserBean();
-		     user.setUsername(request.getParameter("un"));
-		     user.setPassword(request.getParameter("pw"));
-		     user = usDao.doRetrieve(request.getParameter("un"),request.getParameter("pw"));
+		     String username = request.getParameter("un");
+		     String password = request.getParameter("pw");
+		     
+		     String hashedPassword = hashPassword(password);
+		     
+		     user = usDao.doRetrieve(username,hashedPassword);
 			   		    
-		    
+		      
 		     String checkout = request.getParameter("checkout");
 		     
-		     if (user.isValid())
+		     if (user != null && hashedPassword.equals(user.getPassword()))
 		     {
 			        
 		          HttpSession session = request.getSession(true);	    
 		          session.setAttribute("currentSessionUser",user); 
+		          
 		          if(checkout!=null)
 		        	  response.sendRedirect(request.getContextPath() + "/account?page=Checkout.jsp");
 		          
@@ -58,6 +65,18 @@ public class LoginServlet extends HttpServlet {
 				
 		catch(SQLException e) {
 			System.out.println("Error:" + e.getMessage());
-		}
-		  }
+		} catch (NoSuchAlgorithmException e) {
+            System.out.println("Error: Unable to hash password - " + e.getMessage());
+        }
+	  }
+	
+	    private String hashPassword(String password) throws NoSuchAlgorithmException {
+	    MessageDigest md = MessageDigest.getInstance("SHA-512");
+	    byte[] hashedBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+	    StringBuilder sb = new StringBuilder();
+	    for (byte b : hashedBytes) {
+	        sb.append(String.format("%02x", b));
+	    }
+	    return sb.toString();
+	   }
 	}
